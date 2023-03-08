@@ -25,8 +25,6 @@ import MapView, { Callout, Marker } from 'react-native-maps';
 import ImageMarker from "react-native-image-marker"
 import Marker1 from 'react-native-image-marker';
 
-
-
 const ButtonImage = (props) => {
   const [qty, setQty] = useState(1)
   const [show, setShow] = useState(true)
@@ -148,7 +146,7 @@ const Seal = ({ navigation, route }) => {
   const [previousPage, setPreviousPage] = useState(0);
   const [lastPage, setLastPage] = useState([]);
   const [totalPage, settotalPage] = useState([]);
-  const [todos, setTodos] = useState([{'id' : 'Tunggak','name' : 'Tunggak'},{'id' : 'Segel','name' : 'Segel'},{'id' : 'Cabut','name' : 'Cabut'}])
+  const [todos, setTodos] = useState([{'id' : 'Segel','name' : 'Segel'},{'id' : 'Cabut','name' : 'Cabut'}])
  const [dataShow, setDataShow] = useState({'nomorrekening' : '', 'namapelanggan' : '', 'alamat' : '', 'idgol' : '',
 'nomorhp' : '', 'tglentry' : '', 'wmnomor' : '', 'wmukuran' : ''
 });
@@ -195,6 +193,7 @@ const [pag, setPag] = useState(1);
   const [response, setResponse] = useState(null)
   const [responses, setResponses] = useState([]);
   const isFocused = useIsFocused()
+  const [actions, setActions] = useState([])
 
   const handleChecked = (key, value, cust) => {
       setChecked(cust)
@@ -380,9 +379,24 @@ const ShowDetail = (customer_id) => {
       setStatusInput(result.data5.inputStatus)
       setForm({
         ...form,
-        customer_id : result.data.nomorrekening,
-        type: result.data4.tindakan
+        customer_id : result.data.nomorrekening
     })
+
+    // //set actions
+    // let arrAction = [];
+
+    // for (let i = 1; i < 3; i++) {
+    //   let objAction = {
+    //   id: i,
+    //   name: 'Hambatan Segel'+i
+    //   };
+    //   arrAction.push(objAction);
+    //   }
+      
+    // setActions(arrAction)
+
+    setActions(result.data6)
+
       setLoading(false)
   }).catch((e) => {
       console.log(e.request);
@@ -396,14 +410,18 @@ const handleForm = (key, value) => {
   })
 }
 
+const handleProcess = () => {
+  if(form.type !=''){
+    setPage('3')
+  }else{
+  alert('Tindakan belum dipilih !')
+  }
+}
+
   const handleSearch = (value, name) => {
     if(value == "Cabut"){
       setStatus(4)
-    }
-     else if(value == "Segel"){
-      setStatus(3)
-     }
-     else{
+    }else{
       setStatus(2)
      }
       setStatusName(name)
@@ -414,7 +432,7 @@ const handleForm = (key, value) => {
   const reset = () => {
     setStatus('');
     setSearch('');
-    setTodos([{'id' : 'Tunggak','name' : 'Tunggak'},{'id' : 'Segel','name' : 'Segel'},{'id' : 'Cabut','name' : 'Cabut'}]);
+    setTodos([{'id' : 'Segel','name' : 'Segel'},{'id' : 'Cabut','name' : 'Cabut'}]);
     setLoading(true)
     API.customersSearch(USER_ID+'?page=1'+'&status='+''+'&search='+'',TOKEN).then((result) => {
         // setStaffs(result.data)
@@ -1191,6 +1209,9 @@ addAmount = addAmount+amount;
     </View>
   </View>
   </View>
+
+  
+
 </View>
   {/* <TouchableOpacity style={styles.button} onPress={()=>setPage('3')}>
           <Text style={styles.label2white}>Penyampaian Surat</Text>
@@ -1229,10 +1250,46 @@ addAmount = addAmount+amount;
    
    </View>
 
+   <View style={styles.formGroup}>
+  <View style={styles.formField}>
+  <Select2
+                                        
+                                        searchPlaceHolderText='Pilih Tindakan'
+                                        title='Pilih Tindakan'
+                                        
+                                        isSelectSingle
+                                        style={{  
+                                            borderRadius: 0,
+                                            borderColor: '#000000',
+                                            borderWidth: 1,
+                                            height:50
+                                        }}
+                                        buttonStyle={{ 
+                                            backgroundColor:'#0C5CBF',
+                                            height:45,
+                                            borderRadius:0
+                                        }}
+                                        buttonTextStyle={{
+                                            color:'#FFFFFF'                                        
+                                        }}
+                                        colorTheme={'#0C5CBF'}
+                                        popupTitle='Pilih Status'
+                                        data={actions}
+                                        onSelect={data => {
+                                          handleForm('type', data[0])
+                                        }}
+                                        onRemoveItem={data => {
+                                          handleForm('type', data[0])
+                                        }} 
+                                        selectButtonText ='Simpan'
+                                        cancelButtonText='Batal'
+                                  
+                                    />
+</View>
+  </View>
 
 
-
-          <View style = {{borderColor: '#000000', borderWidth: 1, height:50,fontSize : 14,borderRadius:0, }}>
+          {/* <View style = {{borderColor: '#000000', borderWidth: 1, height:50,fontSize : 14,borderRadius:0, }}>
           {form.type == 'notice' &&
 <View>
 <Text  style={{fontSize : 14, paddingTop: 10, paddingLeft : 10}}>Penyampaian Surat</Text>
@@ -1253,7 +1310,7 @@ addAmount = addAmount+amount;
 <Text  style={{fontSize : 14, paddingTop: 10, paddingLeft : 10}}>Cabutan</Text>
 </View>
   }
-</View>
+</View> */}
 
 {statusInput == "sudah" &&
   <TouchableOpacity style={styles.buttonRed} disabled={true}>
@@ -1261,7 +1318,7 @@ addAmount = addAmount+amount;
 </TouchableOpacity>
 }
 {statusInput != "sudah" &&
- <TouchableOpacity style={styles.button} onPress={()=>setPage('3')}>
+ <TouchableOpacity style={styles.button} onPress={()=>handleProcess()}>
  <Text style={styles.label2white}>PROSES</Text>
 </TouchableOpacity>
 }

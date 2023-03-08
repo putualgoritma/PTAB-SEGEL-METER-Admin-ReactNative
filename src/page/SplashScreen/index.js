@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect } from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { SET_DATA_PERMISSION, SET_DATA_TOKEN, SET_DATA_USER } from '../../redux/action';
 import API from '../../service';
 import ScreenLoading from '../loading/ScreenLoading';
+
   const SplashScreen=({navigation})=>{
       const image =require('../../assets/img/SplashScreen.png')
       const dispatch = useDispatch();
@@ -24,7 +25,9 @@ import ScreenLoading from '../loading/ScreenLoading';
                                     storeDataToken(result.token)
                                     storeDataUser(result.data)
                                     storeDataPermission(result.permission)
+                                    console.log('sudah login2',result);
                                     navigation.replace('MainApp')
+                                    //navigation.replace('Login')
                               }).catch((e) => {
                                     console.log(e);
                                     navigation.replace('Login')
@@ -106,7 +109,8 @@ import ScreenLoading from '../loading/ScreenLoading';
         }
     
       return (
-      <ScreenLoading/>
+            //<View></View>
+            <ScreenLoading/>
       )
   }
   

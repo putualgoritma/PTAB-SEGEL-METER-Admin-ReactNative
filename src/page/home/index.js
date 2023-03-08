@@ -19,14 +19,15 @@ const Home = ({ navigation }) => {
   const [time, setTime] = React.useState();
 
   React.useEffect(() => {
+    console.log('sudah home',USER);
     setName(USER.name)
-    const timer = setInterval(() => {
-      setTime(new Date().getDate() + "-" + parseInt(new Date().getMonth() + 1) + "-" + new Date().getFullYear() + " " + (new Date().getHours()) + ":" + new Date().getMinutes() + ":" + new Date().getSeconds());
-    }, 1000);
+    // const timer = setInterval(() => {
+    //   setTime(new Date().getDate() + "-" + parseInt(new Date().getMonth() + 1) + "-" + new Date().getFullYear() + " " + (new Date().getHours()) + ":" + new Date().getMinutes() + ":" + new Date().getSeconds());
+    // }, 1000);
 
-    return () => {
-      clearInterval(timer);
-    };
+    // return () => {
+    //   clearInterval(timer);
+    // };
 
   }, []);
   return (
