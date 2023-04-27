@@ -111,6 +111,7 @@ useEffect(() => {
 <View style = {styles.row1}>
 <TextInput 
  style={styles.search}
+ onChangeText={newText => props.setSearch(newText)}
 //  autoFocus = {true}
 />
 

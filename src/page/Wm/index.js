@@ -5,14 +5,14 @@ import { PermissionsAndroid, ScrollView, StyleSheet, View, Image, Text, Dimensio
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import DropDownPicker from 'react-native-dropdown-picker';
 import Select2 from 'react-native-select-two';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { Txt } from '../../component';
 import API from '../../service';
 import ScreenLoading from '../loading/ScreenLoading'
 import Navbar from '../../component/Navbar'
 import Icon1 from 'react-native-vector-icons/FontAwesome5'
 import { useIsFocused } from '@react-navigation/native';
-
+import { SET_DATA_PAG } from '../../redux/action';
 
 
 const Wm = ({ navigation, route }) => {
@@ -35,7 +35,8 @@ const Wm = ({ navigation, route }) => {
 
   const [roles, setRoles] = useState([]);
   const { width, height } = Dimensions.get('window');
-  const [pag, setPag] = useState(1);
+  const pagReducer = useSelector((state) => state.PagReducer);
+  const [pag, setPag] = useState(pagReducer ? pagReducer : 1);
   DropDownPicker.setListMode("SCROLLVIEW");
   const TOKEN = useSelector((state) => state.TokenReducer);
   const [loading, setLoading] = useState(true)
@@ -43,6 +44,7 @@ const Wm = ({ navigation, route }) => {
   const USER = useSelector((state) => state.UserReducer);
   const USER_ID = useSelector((state) => state.UserReducer.id);
   const formParams = route.params ? route.params.ticket : ''
+  const dispatch = useDispatch();
 
   // form
   const [form, setForm] = useState({
@@ -109,6 +111,8 @@ setRoles(rol)
       if (currentPage > 1) {
         console.log(previousPage)
         setLoading(true)
+        setPag(previousPage)
+        dispatch(SET_DATA_PAG(previousPage))
         API.watermeter(USER_ID, '?page=' + previousPage, status, searchPriority, statusSM, searchArea, search, orderType, order,date1 != '0000-00-00' ? date1 : '', date2  != '0000-00-00' ? date2 : '', TOKEN).then((result) => {
           // setStaffs(result.data)
           console.log('staff', result)
@@ -134,6 +138,8 @@ setRoles(rol)
       if (currentPage < lastPage) {
         console.log('test', nextPage)
         setLoading(true)
+        setPag(nextPage)
+        dispatch(SET_DATA_PAG(nextPage))
         API.watermeter(USER_ID, '?page=' + nextPage, status, searchPriority, statusSM, searchArea, search,orderType, order, date1 != '0000-00-00' ? date1 : '', date2  != '0000-00-00' ? date2 : '', TOKEN).then((result) => {
           // setStaffs(result.data)
           console.log('staff', result)
@@ -160,7 +166,7 @@ setRoles(rol)
   const actionStaffListsAPi = () => {
     console.log(String(pag))
     setLoading(true)
-    API.watermeter(USER_ID, '?page=1', status, searchPriority, statusSM, searchArea, search, orderType, order, date1 != '0000-00-00' ? date1 : '', date2 != '0000-00-00' ? date2 : '', TOKEN).then((result) => {
+    API.watermeter(USER_ID, '?page='+pag, status, searchPriority, statusSM, searchArea, search, orderType, order, date1 != '0000-00-00' ? date1 : '', date2 != '0000-00-00' ? date2 : '', TOKEN).then((result) => {
       // setStaffs(result.data)
       console.log('staff', status)
       console.log('staff1', result.message)
@@ -371,7 +377,7 @@ setFilterStatus([{ "id": "1", "name": "Semua", "value": "", "checked": true },
 
   return (
     <View style={styles.container}>
-      <Navbar date1 = {date1} date2 = {date2} setDate2 = {setDate2} setDate1 = {setDate1} handleForm4={handleForm4} reset={reset} filterStatus={filterStatus} handleForm3={handleForm3} filterPriority={filterPriority} areas={areas} setAreas={setAreas} handleSearch={handleSearch} FilterBar={FilterBar} setFilterBar={setFilterBar} totalPage={totalPage} filter={filter} handleForm={handleForm1} handleForm2={handleForm2} dpdwn={dpdwn} setDpdwn={setDpdwn} />
+      <Navbar date1 = {date1} date2 = {date2} setDate2 = {setDate2} setDate1 = {setDate1} handleForm4={handleForm4} reset={reset} filterStatus={filterStatus} handleForm3={handleForm3} filterPriority={filterPriority} areas={areas} setAreas={setAreas} handleSearch={handleSearch} FilterBar={FilterBar} setFilterBar={setFilterBar} totalPage={totalPage} filter={filter} handleForm={handleForm1} handleForm2={handleForm2} dpdwn={dpdwn} setDpdwn={setDpdwn} setSearch={setSearch} />
       <View style={styles.content}>
 
 

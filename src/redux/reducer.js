@@ -24,6 +24,16 @@ const TokenReducer = (state = Token, action) => {
   return state; 
 };
 
+const Pag = '';
+
+const PagReducer = (state = Pag, action) => {
+  if (action.type === 'SET_DATA_PAG') {
+    state = action.value
+    // console.log('action token',action.value);
+  }
+  return state; 
+};
+
 const Permission = '';
 
 const PermissionReducer = (state = Permission, action) => {
@@ -38,7 +48,8 @@ const PermissionReducer = (state = Permission, action) => {
 const reducer = combineReducers({
     UserReducer,
     TokenReducer,
-    PermissionReducer
+    PermissionReducer,
+    PagReducer
 })
 
 export default reducer;

@@ -42,7 +42,7 @@ const Home = ({ navigation }) => {
           <Text style={styles.label3white}>PERUMDA TIRTA AMERTHA BUANA</Text>
           <View><Image source={logo512} style={styles.images} /></View>
           <Text style={styles.label3white}>{time}</Text>
-          <Text style={styles.label3white}>Ver : 22-12-2022</Text>
+          <Text style={styles.label3white}>Ver : 08-03-2023</Text>
           <View style={styles.floatingScreen}><Text style={styles.label1}>{name}</Text></View>
         </View>
       </ImageBackground>

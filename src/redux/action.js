@@ -13,3 +13,7 @@ export const SET_DATA_PERMISSION = (value) => {
 export const SET_DATA_CART = (value) => {
     return {type: 'SET_DATA_CART', value: value};
 };
+
+export const SET_DATA_PAG = (value) => {
+    return {type: 'SET_DATA_PAG', value: value};
+};
